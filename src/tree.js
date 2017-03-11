@@ -18,11 +18,31 @@ function Tree(root) {
 	}
 	this.root = root;
 }
-
+/**
+ * export Box on tree
+ * @type {Box}
+ */
+Tree.Box = Box;
+/**
+ * export LineSegment on tree
+ * @type {LineSegment}
+ */
+Tree.LineSegment = LineSegment;
+/**
+ * creates a new tree from line
+ * @param line
+ * @returns {Tree}
+ * @constructor
+ */
 Tree.FromLine = function(line) {
 	return new Tree(treeFromBoxes(boxesFromLine(line)));
 };
-
+/**
+ * creates a new tree from lines
+ * @param lines
+ * @returns {Tree}
+ * @constructor
+ */
 Tree.FromLines = function(lines) {
 	var boxes = [];
 	var i     = -1;
@@ -173,15 +193,13 @@ function ascendingY(a, b) {
 }
 
 function boxesFromLine(line) {
-	var p0;
-	var p1    = line[0];
-	var i     = 0;
-	var n     = line.length;
-	var boxes = new Array(n - 1);
-	while(++i < n) {
-		p0           = p1;
-		p1           = line[i];
-		boxes[i - 1] = new LineSegment(p0[0], p0[1], p1[0], p1[1]).box();
+	var boxes = [];
+	var x = 0, y = 1, ln;
+	for(var i = 0; i < line.length - 1; i++) {
+		ln = new LineSegment(
+			line[i][x], line[i][y], line[i + 1][x], line[i + 1][y]
+		);
+		boxes.push(ln.box())
 	}
 	return boxes;
 }

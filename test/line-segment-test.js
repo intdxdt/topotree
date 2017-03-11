@@ -1,10 +1,10 @@
 var box         = require("../src/box.js");
-var LineSegment = require("../src/lnsegment");
+var LineSegment = require("../src").LineSegment;
 var test        = require('tape');
 
 test("stores the coordinates as [xa, ya] -> [xb, yb]", function(t) {
 	t.plan(4);
-	var seg = new LineSegment(1, 2, 3, 4);
+	var seg = LineSegment(1, 2, 3, 4);
 	t.equal(seg.xa, 1);
 	t.equal(seg.ya, 2);
 	t.equal(seg.xb, 3);

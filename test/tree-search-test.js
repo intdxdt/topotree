@@ -1,14 +1,13 @@
-var box  = require("../src/box.js");
-var tree = require("../src/index");
+var tree = require("../src");
 var test = require('tape');
 
 var ε = 1e-6;
 
 test("returns the nearest leaf node to the given point", function(t) {
 	t.plan(6);
-	var tp = tree.fromLine([[0, 0], [0, 1], [1, 1]]);
-	var l0 = tree.lineSegment(0, 0, 0, 1); // TODO a better API
-	var l1 = tree.lineSegment(0, 1, 1, 1);
+	var tp = tree.FromLine([[0, 0], [0, 1], [1, 1]]);
+	var l0 = tree.LineSegment(0, 0, 0, 1); // TODO a better API
+	var l1 = tree.LineSegment(0, 1, 1, 1);
 
 	t.deepEqual(tp.search(nearest([0, -1])), l0);
 	t.deepEqual(tp.search(nearest([0, 0])), l0);

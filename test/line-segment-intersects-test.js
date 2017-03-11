@@ -1,5 +1,5 @@
 var box         = require("../src/box.js");
-var LineSegment = require("../src/lnsegment");
+var LineSegment = require("../src").LineSegment;
 var test        = require('tape');
 
 var ε = 1e-6;
