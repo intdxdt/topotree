@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "main": "index.js",
   "dependencies": {
-    "smash": "0.0",
-    "uglify-js": "2.4",
-    "vows": "0.7"
+    "uglify-js": "2.4"
+  },
+  "devDependencies": {
+    "tape": "^4.6.3"
   }
 }

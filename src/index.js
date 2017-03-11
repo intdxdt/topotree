@@ -1,13 +1,10 @@
-(function() {
+var Box         = require("./box");
+var lineSegment = require("./lnsegment");
+var tree        = require("./tree");
 
-import "box";
-import "line-segment";
-
-this.tree = {
-  box: box,
-  lineSegment: lineSegment,
-  fromLines: lineSegment_treeFromLines,
-  fromLine: lineSegment_treeFromLine
+module.exports = {
+	box: Box,
+	lineSegment: lineSegment,
+	fromLines: tree.FromLines,
+	fromLine: tree.FromLine
 };
-
-})();

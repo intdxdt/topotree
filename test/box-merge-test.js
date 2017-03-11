@@ -1,46 +1,43 @@
-var smash = require("smash"),
-    vows = require("vows"),
-    assert = require("assert");
+var box  = require("../src/box.js");
+var test = require('tape');
 
-var suite = vows.describe("box.merge");
+test("children is the two child nodes", two_child_nodes);
+test("merges the bounding box of the two children", merge_with_2_children);
+test("merges in-place when the bounding box of this subsumes that", this_subsumes_that);
+test("merges in-place when the bounding box of that subsumes this", that_subsumes_this);
 
-suite.addBatch({
-  "box.merge": {
-    topic: function() {
-      smash.load(["src/box.js"], "box", {console: console}, this.callback);
-    },
-
-    "children is the two child nodes": function(box) {
-      var b0 = box(0, 0, 1, 1, []),
-          b1 = box(1, 2, 3, 4, []);
-      assert.deepEqual([b0, b1], b0.merge(b1).children);
-    },
-
-    "merges the bounding box of the two children": function(box) {
-      assert.deepEqual([0, 0, 3, 4], extent(box(0, 0, 1, 1, []).merge(box(1, 2, 3, 4, []))));
-      assert.deepEqual([0, 0, 3, 4], extent(box(0, 0, 3, 4, []).merge(box(1, 1, 1, 2, []))));
-      assert.deepEqual([0, 0, 3, 4], extent(box(1, 2, 3, 4, []).merge(box(0, 0, 1, 1, []))));
-      assert.deepEqual([0, 0, 3, 4], extent(box(1, 1, 1, 2, []).merge(box(0, 0, 3, 4, []))));
-    },
-
-    "merges in-place when the bounding box of this subsumes that": function(box) {
-      var b0 = box(0, 0, 3, 3, []),
-          b1 = box(1, 1, 2, 2, []);
-      assert.deepEqual(b0, b0.merge(b1));
-      assert.deepEqual([b1], b0.children);
-    },
-
-    "merges in-place when the bounding box of that subsumes this": function(box) {
-      var b0 = box(0, 0, 3, 3, []),
-          b1 = box(1, 1, 2, 2, []);
-      assert.deepEqual(b0, b1.merge(b0));
-      assert.deepEqual([b1], b0.children);
-    }
-  }
-});
-
-function extent(box) {
-  return [box.x0, box.y0, box.x1, box.y1];
+function two_child_nodes(t) {
+	t.plan(1);
+	var b0 = box(0, 0, 1, 1, []);
+	var    b1 = box(1, 2, 3, 4, []);
+	t.deepEqual([b0, b1], b0.merge(b1).children);
 }
 
-suite.export(module);
+function merge_with_2_children(t) {
+	t.plan(4);
+	t.deepEqual([0, 0, 3, 4], extent(box(0, 0, 1, 1, []).merge(box(1, 2, 3, 4, []))));
+	t.deepEqual([0, 0, 3, 4], extent(box(0, 0, 3, 4, []).merge(box(1, 1, 1, 2, []))));
+	t.deepEqual([0, 0, 3, 4], extent(box(1, 2, 3, 4, []).merge(box(0, 0, 1, 1, []))));
+	t.deepEqual([0, 0, 3, 4], extent(box(1, 1, 1, 2, []).merge(box(0, 0, 3, 4, []))));
+}
+
+function this_subsumes_that(t) {
+	t.plan(2);
+	var b0 = box(0, 0, 3, 3, []);
+	var b1 = box(1, 1, 2, 2, []);
+	t.deepEqual(b0, b0.merge(b1));
+	t.deepEqual([b1], b0.children);
+}
+
+function that_subsumes_this(t) {
+	t.plan(2);
+	var b0 = box(0, 0, 3, 3, []);
+	var b1 = box(1, 1, 2, 2, []);
+	t.deepEqual(b0, b1.merge(b0));
+	t.deepEqual([b1], b0.children);
+}
+
+function extent(box) {
+	return [box.x0, box.y0, box.x1, box.y1];
+}
+

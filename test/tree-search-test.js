@@ -1,35 +1,26 @@
-var smash = require("smash"),
-    vows = require("vows"),
-    assert = require("assert");
-
-var suite = vows.describe("tree.search");
+var box  = require("../src/box.js");
+var tree = require("../src/index");
+var test = require('tape');
 
 var ε = 1e-6;
 
-suite.addBatch({
-  "tree.search": {
-    topic: function() {
-      smash.load(["src/index.js"], "tree", {console: console}, this.callback);
-    },
+test("returns the nearest leaf node to the given point", function(t) {
+	t.plan(6);
+	var tp = tree.fromLine([[0, 0], [0, 1], [1, 1]]);
+	var l0 = tree.lineSegment(0, 0, 0, 1); // TODO a better API
+	var l1 = tree.lineSegment(0, 1, 1, 1);
 
-    "returns the nearest leaf node to the given point": function(tree) {
-      var t = tree.fromLine([[0, 0], [0, 1], [1, 1]]),
-          l0 = tree.lineSegment(0, 0, 0, 1), // TODO a better API
-          l1 = tree.lineSegment(0, 1, 1, 1);
-      assert.deepEqual(t.search(nearest([0, -1])), l0);
-      assert.deepEqual(t.search(nearest([0, 0])), l0);
-      assert.deepEqual(t.search(nearest([0, .5])), l0);
-      assert.deepEqual(t.search(nearest([.5, .5 - ε])), l0);
-      assert.deepEqual(t.search(nearest([.5, .5 + ε])), l1);
-      assert.deepEqual(t.search(nearest([1, 1])), l1);
-    }
-  }
+	t.deepEqual(tp.search(nearest([0, -1])), l0);
+	t.deepEqual(tp.search(nearest([0, 0])), l0);
+	t.deepEqual(tp.search(nearest([0, .5])), l0);
+	t.deepEqual(tp.search(nearest([.5, .5 - ε])), l0);
+	t.deepEqual(tp.search(nearest([.5, .5 + ε])), l1);
+	t.deepEqual(tp.search(nearest([1, 1])), l1);
 });
 
 function nearest(point) {
-  return function(node) {
-    return node.distance(point);
-  };
+	return function(node) {
+		return node.distance(point);
+	};
 }
 
-suite.export(module);
